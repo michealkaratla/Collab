@@ -3,148 +3,206 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Power House - Admin Dashboard</title>
+  <title>MOBSTA - Food Dashboard</title>
   
-  <!-- Bootstrap CSS -->
+  <!-- Bootstrap (for layout and buttons) -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <style>
     body {
-      background-color: #f4f6f8;
+      background: linear-gradient(145deg, #f1f2f7, #d7dae3);
+      font-family: 'Segoe UI', sans-serif;
     }
-    .card-title {
-      font-size: 1.2rem;
+
+    .navbar {
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
-    .card-text {
-      font-size: 1.5rem;
+
+    .card-3d {
+      perspective: 1000px;
+      transition: transform 0.5s;
+      transform-style: preserve-3d;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+    }
+
+    .card-3d-inner {
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+      position: relative;
+    }
+
+    .card-3d:hover .card-3d-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    .card-front {
+      background: white;
+      z-index: 2;
+    }
+
+    .card-back {
+      background: #fafafa;
+      transform: rotateY(180deg);
+    }
+
+    .restaurant-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .menu-item {
+      padding: 10px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .menu-item:last-child {
+      border-bottom: none;
+    }
+
+    .menu-item h6 {
+      margin: 0;
+    }
+
+    .menu-item span {
+      float: right;
       font-weight: bold;
     }
-    .navbar-brand img {
-      margin-right: 10px;
+
+    .restaurant-name {
+      text-align: center;
+      font-weight: bold;
+      padding: 10px;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #888;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
-  <!-- Navigation Bar -->
-  <nav class="navbar navbar-dark bg-dark">
-    <div class="container-fluid">
-      <a class="navbar-brand d-flex align-items-center" href="#">
-        <img src="https://img.icons8.com/color/48/000000/restaurant.png" alt="Logo" width="30" height="30">
-        <span>Power House Dashboard</span>
-      </a>
-      <button class="btn btn-outline-light" onclick="logout()">Logout</button>
-    </div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-dark bg-dark px-4">
+    <a class="navbar-brand" href="#">
+      <img src="https://img.icons8.com/emoji/48/hamburger-emoji.png" alt="logo" width="30" />
+      MOBSTA - Food Dashboard
+    </a>
+    <button class="btn btn-outline-light" onclick="logout()">Logout</button>
   </nav>
 
-  <!-- Dashboard Content -->
-  <div class="container-fluid mt-4">
-    <div class="row">
-      <!-- Sidebar -->
-      <div class="col-md-3 mb-3">
-        <div class="list-group">
-          <a href="#" class="list-group-item list-group-item-action active">Dashboard</a>
-          <a href="#" class="list-group-item list-group-item-action">Orders</a>
-          <a href="#" class="list-group-item list-group-item-action">Users</a>
-          <a href="#" class="list-group-item list-group-item-action">Restaurants</a>
-          <a href="#" class="list-group-item list-group-item-action">Analytics</a>
-        </div>
-      </div>
-
-      <!-- Main Dashboard -->
-      <div class="col-md-9">
-        <h2>Welcome, Admin</h2>
-        <div class="row mt-4">
-          <div class="col-md-4">
-            <div class="card text-white bg-primary mb-3">
-              <div class="card-body">
-                <h5 class="card-title">Total Orders</h5>
-                <p class="card-text" id="total-orders">Loading...</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card text-white bg-success mb-3">
-              <div class="card-body">
-                <h5 class="card-title">Active Users</h5>
-                <p class="card-text" id="active-users">Loading...</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card text-white bg-warning mb-3">
-              <div class="card-body">
-                <h5 class="card-title">Partnered Restaurants</h5>
-                <p class="card-text" id="restaurant-count">Loading...</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Recent Orders Table -->
-        <div class="mt-5">
-          <h4>Recent Orders</h4>
-          <table class="table table-bordered table-hover">
-            <thead class="table-dark">
-              <tr>
-                <th>#</th>
-                <th>Customer</th>
-                <th>Restaurant</th>
-                <th>Status</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody id="order-table">
-              <!-- JavaScript will populate this -->
-            </tbody>
-          </table>
-        </div>
-      </div>
+  <div class="container mt-5">
+    <h2 class="mb-4 text-center">Partnered Restaurants</h2>
+    <div class="row" id="restaurant-container">
+      <!-- JavaScript will render restaurant cards here -->
     </div>
   </div>
+
+  <footer class="mt-5">
+    &copy; 2025 MOBSTA. All rights reserved.
+  </footer>
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Inline JavaScript -->
+  <!-- JavaScript -->
   <script>
-    // Fake dashboard data (replace with real API calls if needed)
-    const dashboardData = {
-      totalOrders: 2480,
-      activeUsers: 430,
-      restaurants: 68,
-      recentOrders: [
-        { id: 1, customer: "John Doe", restaurant: "Pizza Palace", status: "Delivered", total: "$25.99" },
-        { id: 2, customer: "Jane Smith", restaurant: "Sushi Central", status: "Pending", total: "$40.50" },
-        { id: 3, customer: "Ahmed Ali", restaurant: "Burger Town", status: "Cancelled", total: "$15.75" },
-        { id: 4, customer: "Maria Gomez", restaurant: "Taco Fiesta", status: "Delivered", total: "$19.99" }
-      ]
-    };
+    const restaurants = [
+      {
+        name: "Pizza Palace",
+        image: "https://images.unsplash.com/photo-1594007654729-e2b6b9c6c51d",
+        menu: [
+          { item: "Margherita", price: "$8.99" },
+          { item: "Pepperoni", price: "$10.49" },
+          { item: "BBQ Chicken", price: "$11.99" },
+        ]
+      },
+      {
+        name: "Sushi Central",
+        image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7",
+        menu: [
+          { item: "California Roll", price: "$6.99" },
+          { item: "Spicy Tuna", price: "$7.49" },
+          { item: "Salmon Nigiri", price: "$8.99" },
+        ]
+      },
+      {
+        name: "Taco Fiesta",
+        image: "https://images.unsplash.com/photo-1604908177529-089d6eac8f89",
+        menu: [
+          { item: "Beef Taco", price: "$4.99" },
+          { item: "Chicken Quesadilla", price: "$6.49" },
+          { item: "Nachos Deluxe", price: "$7.99" },
+        ]
+      },
+      {
+        name: "Burger Hub",
+        image: "https://images.unsplash.com/photo-1606755962771-45c8bd2bb112",
+        menu: [
+          { item: "Classic Burger", price: "$5.99" },
+          { item: "Cheese Burst", price: "$6.99" },
+          { item: "Veggie Delight", price: "$5.49" },
+        ]
+      }
+    ];
 
-    // Load dashboard data on page load
-    window.onload = function() {
-      document.getElementById('total-orders').textContent = dashboardData.totalOrders;
-      document.getElementById('active-users').textContent = dashboardData.activeUsers;
-      document.getElementById('restaurant-count').textContent = dashboardData.restaurants;
+    function renderRestaurants() {
+      const container = document.getElementById("restaurant-container");
+      restaurants.forEach((rest, index) => {
+        const menuItemsHTML = rest.menu.map(item => `
+          <div class="menu-item">
+            <h6>${item.item} <span>${item.price}</span></h6>
+          </div>
+        `).join('');
 
-      const orderTable = document.getElementById('order-table');
-      dashboardData.recentOrders.forEach(order => {
-        const row = `
-          <tr>
-            <td>${order.id}</td>
-            <td>${order.customer}</td>
-            <td>${order.restaurant}</td>
-            <td>${order.status}</td>
-            <td>${order.total}</td>
-          </tr>
+        const cardHTML = `
+          <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card-3d">
+              <div class="card-3d-inner">
+                <div class="card-front">
+                  <img src="${rest.image}" class="restaurant-img" alt="${rest.name}">
+                  <div class="restaurant-name">${rest.name}</div>
+                </div>
+                <div class="card-back">
+                  <div class="restaurant-name">${rest.name} Menu</div>
+                  <div class="p-3">
+                    ${menuItemsHTML}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         `;
-        orderTable.innerHTML += row;
+        container.innerHTML += cardHTML;
       });
-    };
+    }
 
     function logout() {
       alert("Logging out...");
-      // Here you can add token clearing or redirect to login
+      // Placeholder: Replace with real logout logic
     }
+
+    // Load on page load
+    window.onload = renderRestaurants;
   </script>
 </body>
 </html>
+
+
+
+
