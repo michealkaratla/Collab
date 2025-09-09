@@ -2,35 +2,35 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Power House | Food Delivery</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     * {
       box-sizing: border-box;
-      padding: 0;
       margin: 0;
+      padding: 0;
       font-family: 'Segoe UI', sans-serif;
     }
 
     body {
       display: flex;
-      height: 100vh;
-      background-color: #f7f7f7;
-      color: #333;
+      min-height: 100vh;
+      background-color: #f4f4f4;
     }
 
     /* Sidebar */
     .sidebar {
-      width: 220px;
-      background-color: #1a1a1a;
-      padding: 20px;
-      color: white;
+      width: 250px;
+      background-color: #212121;
+      padding: 30px 20px;
+      color: #fff;
     }
 
-    .sidebar h2 {
+    .sidebar h1 {
       font-size: 24px;
       color: #ff5722;
       margin-bottom: 40px;
+      text-align: center;
     }
 
     .sidebar ul {
@@ -38,69 +38,70 @@
     }
 
     .sidebar ul li {
-      margin: 20px 0;
+      padding: 12px 20px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      background-color: #2c2c2c;
       cursor: pointer;
-      padding: 10px;
-      transition: 0.3s;
-      border-radius: 5px;
+      transition: background 0.3s;
     }
 
     .sidebar ul li:hover {
-      background-color: #333;
+      background-color: #ff5722;
     }
 
-    /* Main content */
+    /* Main Content */
     .main {
       flex: 1;
-      padding: 30px;
+      padding: 40px;
       overflow-y: auto;
     }
 
-    .header {
+    .main h2 {
       font-size: 28px;
-      margin-bottom: 30px;
-      color: #ff5722;
+      margin-bottom: 25px;
+      color: #333;
     }
 
-    .menu-grid {
+    .food-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
     }
 
-    .menu-card {
-      background-color: white;
+    .food-card {
+      background-color: #fff;
       border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
       overflow: hidden;
       transition: transform 0.3s;
     }
 
-    .menu-card:hover {
-      transform: scale(1.03);
+    .food-card:hover {
+      transform: translateY(-5px);
     }
 
-    .menu-card img {
+    .food-card img {
       width: 100%;
-      height: 150px;
+      height: 160px;
       object-fit: cover;
     }
 
-    .menu-content {
+    .food-content {
       padding: 15px;
     }
 
-    .menu-content h4 {
+    .food-content h3 {
       font-size: 18px;
       margin-bottom: 8px;
     }
 
-    .menu-content p {
+    .food-content p {
       font-size: 14px;
       color: #666;
     }
 
-    .price {
+    .food-price {
       margin-top: 10px;
       font-weight: bold;
       color: #ff5722;
@@ -119,109 +120,118 @@
 </head>
 <body>
 
+  <!-- Sidebar -->
   <div class="sidebar">
-    <h2>Power House</h2>
+    <h1>Power House</h1>
     <ul>
-      <li onclick="loadMenu('burgerKing')">Burger King</li>
-      <li onclick="loadMenu('pizzaHut')">Pizza Hut</li>
-      <li onclick="loadMenu('tacoBell')">Taco Bell</li>
-      <li onclick="loadMenu('starbucks')">Starbucks</li>
+      <li onclick="loadMenu('pizza')">Pizza Planet</li>
+      <li onclick="loadMenu('burgers')">Burger Queen</li>
+      <li onclick="loadMenu('desserts')">Sweet Tooth</li>
+      <li onclick="loadMenu('drinks')">Cool Drinks</li>
     </ul>
   </div>
 
+  <!-- Main Dashboard -->
   <div class="main">
-    <div class="header" id="restaurantName">Select a Restaurant</div>
-    <div class="menu-grid" id="menuGrid">
-      <!-- Menu items load here -->
+    <h2 id="restaurantTitle">Select a Restaurant</h2>
+    <div class="food-grid" id="foodGrid">
+      <!-- Food cards will be injected here -->
     </div>
   </div>
 
+  <!-- JavaScript -->
   <script>
     const menus = {
-      burgerKing: [
+      pizza: [
         {
-          name: "Whopper",
-          desc: "Juicy flame-grilled beef burger",
-          price: "$6.99",
-          img: "https://i.imgur.com/9z3bKfL.jpg"
+          name: "Pepperoni Pizza",
+          desc: "Cheesy pizza topped with spicy pepperoni slices.",
+          price: "$10.99",
+          img: "https://images.unsplash.com/photo-1601924582975-7e04ec5b4061?auto=format&fit=crop&w=800&q=80"
         },
         {
-          name: "Chicken Fries",
-          desc: "Crispy and tasty chicken fries",
-          price: "$4.49",
-          img: "https://i.imgur.com/nkR6gPT.jpg"
+          name: "Margherita",
+          desc: "Classic tomato, mozzarella, and basil.",
+          price: "$8.49",
+          img: "https://images.unsplash.com/photo-1548365328-9f5471c4b3c5?auto=format&fit=crop&w=800&q=80"
         }
       ],
-      pizzaHut: [
+      burgers: [
         {
-          name: "Pan Pizza",
-          desc: "Thick crust loaded with cheese",
-          price: "$9.99",
-          img: "https://i.imgur.com/9jA6p9K.jpg"
+          name: "Beef Burger",
+          desc: "Grilled beef patty with lettuce and cheese.",
+          price: "$7.99",
+          img: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=800&q=80"
         },
         {
-          name: "Pepperoni Feast",
-          desc: "Extra pepperoni and cheese",
-          price: "$11.99",
-          img: "https://i.imgur.com/Ej3UcmA.jpg"
+          name: "Veggie Burger",
+          desc: "Delicious plant-based patty with sauces.",
+          price: "$6.49",
+          img: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=800&q=80"
         }
       ],
-      tacoBell: [
+      desserts: [
         {
-          name: "Crunchy Taco",
-          desc: "Seasoned beef, lettuce & cheese",
-          price: "$2.99",
-          img: "https://i.imgur.com/2wXkN4C.jpg"
-        },
-        {
-          name: "Quesadilla",
-          desc: "Grilled tortilla filled with cheese",
+          name: "Chocolate Cake",
+          desc: "Rich and moist chocolate layered cake.",
           price: "$4.99",
-          img: "https://i.imgur.com/6GxA5vO.jpg"
-        }
-      ],
-      starbucks: [
+          img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80"
+        },
         {
-          name: "Caffe Latte",
-          desc: "Espresso with steamed milk",
+          name: "Ice Cream Sundae",
+          desc: "Vanilla ice cream with hot fudge and nuts.",
           price: "$3.99",
-          img: "https://i.imgur.com/zGZcdHF.jpg"
+          img: "https://images.unsplash.com/photo-1599785209707-28b79ba1fa54?auto=format&fit=crop&w=800&q=80"
+        }
+      ],
+      drinks: [
+        {
+          name: "Mango Smoothie",
+          desc: "Refreshing mango blend with yogurt.",
+          price: "$3.49",
+          img: "https://images.unsplash.com/photo-1585238342028-4bd942d9a047?auto=format&fit=crop&w=800&q=80"
         },
         {
-          name: "Frappuccino",
-          desc: "Blended iced coffee treat",
-          price: "$4.99",
-          img: "https://i.imgur.com/YikTwMt.jpg"
+          name: "Iced Coffee",
+          desc: "Cold brewed coffee over ice.",
+          price: "$2.99",
+          img: "https://images.unsplash.com/photo-1571796108762-d6f99a0ef7c2?auto=format&fit=crop&w=800&q=80"
         }
       ]
     };
 
-    function loadMenu(restaurant) {
-      const menuGrid = document.getElementById("menuGrid");
-      const restaurantName = document.getElementById("restaurantName");
+    function loadMenu(category) {
+      const grid = document.getElementById("foodGrid");
+      const title = document.getElementById("restaurantTitle");
 
-      // Set restaurant name
-      restaurantName.textContent = `${restaurant.replace(/([A-Z])/g, ' $1').trim()} Menu`;
+      // Set the title
+      const formattedName = {
+        pizza: "Pizza Planet",
+        burgers: "Burger Queen",
+        desserts: "Sweet Tooth",
+        drinks: "Cool Drinks"
+      };
+      title.textContent = formattedName[category] + " Menu";
 
-      // Clear previous menu
-      menuGrid.innerHTML = "";
+      // Clear existing menu
+      grid.innerHTML = "";
 
-      // Render new menu
-      menus[restaurant].forEach(item => {
-        const card = document.createElement("div");
-        card.className = "menu-card";
+      // Load new menu
+      menus[category].forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'food-card';
         card.innerHTML = `
           <img src="${item.img}" alt="${item.name}">
-          <div class="menu-content">
-            <h4>${item.name}</h4>
+          <div class="food-content">
+            <h3>${item.name}</h3>
             <p>${item.desc}</p>
-            <div class="price">${item.price}</div>
+            <div class="food-price">${item.price}</div>
           </div>
         `;
-        menuGrid.appendChild(card);
+        grid.appendChild(card);
       });
     }
   </script>
 </body>
 </html>
- 
+
