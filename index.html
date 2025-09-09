@@ -1,208 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MOBSTA - Food Dashboard</title>
-  
-  <!-- Bootstrap (for layout and buttons) -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
+  <meta charset="UTF-8">
+  <title>MOBSTA | Food Delivery Dashboard</title>
   <style>
-    body {
-      background: linear-gradient(145deg, #f1f2f7, #d7dae3);
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
       font-family: 'Segoe UI', sans-serif;
     }
 
-    .navbar {
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    body {
+      background: #0e0e0e;
+      color: #fff;
+      display: flex;
+      min-height: 100vh;
     }
 
-    .card-3d {
-      perspective: 1000px;
-      transition: transform 0.5s;
-      transform-style: preserve-3d;
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background: #1b1b1b;
+      padding: 20px;
+    }
+
+    .sidebar h1 {
+      font-size: 24px;
+      margin-bottom: 30px;
+      color: #ff4d4d;
+    }
+
+    .sidebar ul {
+      list-style: none;
+    }
+
+    .sidebar ul li {
+      margin: 20px 0;
       cursor: pointer;
-      border: none;
-      background: transparent;
+      transition: color 0.3s;
     }
 
-    .card-3d-inner {
-      transition: transform 0.6s;
-      transform-style: preserve-3d;
+    .sidebar ul li:hover {
+      color: #ff4d4d;
+    }
+
+    /* Main */
+    .main {
+      flex: 1;
+      padding: 40px;
+      overflow-y: auto;
+    }
+
+    .main h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .menu-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    /* 3D Floating Cards */
+    .food-card {
+      background: #1a1a1a;
+      border-radius: 20px;
+      width: 200px;
+      height: 260px;
+      padding: 20px;
       position: relative;
+      perspective: 1000px;
+      transition: transform 0.4s;
+      box-shadow: 0 10px 30px rgba(255, 77, 77, 0.2);
     }
 
-    .card-3d:hover .card-3d-inner {
-      transform: rotateY(180deg);
+    .food-card:hover {
+      transform: rotateY(10deg) rotateX(10deg) scale(1.05);
     }
 
-    .card-front, .card-back {
-      position: absolute;
+    .food-card img {
       width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    }
-
-    .card-front {
-      background: white;
-      z-index: 2;
-    }
-
-    .card-back {
-      background: #fafafa;
-      transform: rotateY(180deg);
-    }
-
-    .restaurant-img {
-      width: 100%;
-      height: 180px;
+      height: 140px;
       object-fit: cover;
+      border-radius: 15px;
+      transition: transform 0.4s ease-in-out;
+      animation: float 3s ease-in-out infinite;
     }
 
-    .menu-item {
-      padding: 10px;
-      border-bottom: 1px solid #e0e0e0;
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
     }
 
-    .menu-item:last-child {
-      border-bottom: none;
+    .food-info {
+      margin-top: 15px;
     }
 
-    .menu-item h6 {
-      margin: 0;
+    .food-info h3 {
+      font-size: 18px;
+      margin-bottom: 5px;
     }
 
-    .menu-item span {
-      float: right;
+    .food-info p {
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .price {
+      color: #ff4d4d;
+      margin-top: 10px;
       font-weight: bold;
-    }
-
-    .restaurant-name {
-      text-align: center;
-      font-weight: bold;
-      padding: 10px;
-    }
-
-    footer {
-      text-align: center;
-      margin-top: 40px;
-      color: #888;
-      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h1>MOBSTA</h1>
+    <ul>
+      <li onclick="showMenu('dominos')">Domino's Pizza</li>
+      <li onclick="showMenu('mcdonalds')">McDonald's</li>
+      <li onclick="showMenu('kfc')">KFC</li>
+      <li onclick="showMenu('subway')">Subway</li>
+    </ul>
+  </div>
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-dark bg-dark px-4">
-    <a class="navbar-brand" href="#">
-      <img src="https://img.icons8.com/emoji/48/hamburger-emoji.png" alt="logo" width="30" />
-      MOBSTA - Food Dashboard
-    </a>
-    <button class="btn btn-outline-light" onclick="logout()">Logout</button>
-  </nav>
-
-  <div class="container mt-5">
-    <h2 class="mb-4 text-center">Partnered Restaurants</h2>
-    <div class="row" id="restaurant-container">
-      <!-- JavaScript will render restaurant cards here -->
+  <!-- Main Content -->
+  <div class="main">
+    <h2 id="restaurant-title">Select a Restaurant</h2>
+    <div class="menu-container" id="menu-container">
+      <!-- Food cards will appear here -->
     </div>
   </div>
 
-  <footer class="mt-5">
-    &copy; 2025 MOBSTA. All rights reserved.
-  </footer>
-
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-  <!-- JavaScript -->
   <script>
-    const restaurants = [
-      {
-        name: "Pizza Palace",
-        image: "https://images.unsplash.com/photo-1594007654729-e2b6b9c6c51d",
-        menu: [
-          { item: "Margherita", price: "$8.99" },
-          { item: "Pepperoni", price: "$10.49" },
-          { item: "BBQ Chicken", price: "$11.99" },
-        ]
-      },
-      {
-        name: "Sushi Central",
-        image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7",
-        menu: [
-          { item: "California Roll", price: "$6.99" },
-          { item: "Spicy Tuna", price: "$7.49" },
-          { item: "Salmon Nigiri", price: "$8.99" },
-        ]
-      },
-      {
-        name: "Taco Fiesta",
-        image: "https://images.unsplash.com/photo-1604908177529-089d6eac8f89",
-        menu: [
-          { item: "Beef Taco", price: "$4.99" },
-          { item: "Chicken Quesadilla", price: "$6.49" },
-          { item: "Nachos Deluxe", price: "$7.99" },
-        ]
-      },
-      {
-        name: "Burger Hub",
-        image: "https://images.unsplash.com/photo-1606755962771-45c8bd2bb112",
-        menu: [
-          { item: "Classic Burger", price: "$5.99" },
-          { item: "Cheese Burst", price: "$6.99" },
-          { item: "Veggie Delight", price: "$5.49" },
-        ]
-      }
-    ];
+    const menus = {
+      dominos: [
+        { name: "Pepperoni Pizza", price: "$12.99", img: "https://i.imgur.com/bK5mWgU.jpg" },
+        { name: "Veggie Delight", price: "$10.49", img: "https://i.imgur.com/gAx8y2T.jpg" },
+        { name: "Cheese Burst", price: "$11.99", img: "https://i.imgur.com/WKMlXUl.jpg" },
+      ],
+      mcdonalds: [
+        { name: "Big Mac", price: "$5.99", img: "https://i.imgur.com/ZXb2kKH.jpg" },
+        { name: "Fries", price: "$2.49", img: "https://i.imgur.com/qeTgW7K.jpg" },
+        { name: "McChicken", price: "$4.99", img: "https://i.imgur.com/KL41aRy.jpg" },
+      ],
+      kfc: [
+        { name: "Zinger Burger", price: "$6.99", img: "https://i.imgur.com/iv1h7t5.jpg" },
+        { name: "Bucket Chicken", price: "$14.99", img: "https://i.imgur.com/PLKQlFZ.jpg" },
+        { name: "Popcorn Chicken", price: "$5.49", img: "https://i.imgur.com/TB7X4yw.jpg" },
+      ],
+      subway: [
+        { name: "Turkey Sub", price: "$7.99", img: "https://i.imgur.com/xoULC0T.jpg" },
+        { name: "Veggie Sub", price: "$6.49", img: "https://i.imgur.com/BCN2GxU.jpg" },
+        { name: "Chicken Teriyaki", price: "$8.99", img: "https://i.imgur.com/qOqNcnC.jpg" },
+      ],
+    };
 
-    function renderRestaurants() {
-      const container = document.getElementById("restaurant-container");
-      restaurants.forEach((rest, index) => {
-        const menuItemsHTML = rest.menu.map(item => `
-          <div class="menu-item">
-            <h6>${item.item} <span>${item.price}</span></h6>
-          </div>
-        `).join('');
+    function showMenu(restaurant) {
+      const menu = menus[restaurant];
+      const container = document.getElementById("menu-container");
+      const title = document.getElementById("restaurant-title");
 
-        const cardHTML = `
-          <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card-3d">
-              <div class="card-3d-inner">
-                <div class="card-front">
-                  <img src="${rest.image}" class="restaurant-img" alt="${rest.name}">
-                  <div class="restaurant-name">${rest.name}</div>
-                </div>
-                <div class="card-back">
-                  <div class="restaurant-name">${rest.name} Menu</div>
-                  <div class="p-3">
-                    ${menuItemsHTML}
-                  </div>
-                </div>
-              </div>
-            </div>
+      title.innerText = restaurant.charAt(0).toUpperCase() + restaurant.slice(1) + " Menu";
+      container.innerHTML = "";
+
+      menu.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "food-card";
+        card.innerHTML = `
+          <img src="${item.img}" alt="${item.name}">
+          <div class="food-info">
+            <h3>${item.name}</h3>
+            <p class="price">${item.price}</p>
           </div>
         `;
-        container.innerHTML += cardHTML;
+        container.appendChild(card);
       });
     }
-
-    function logout() {
-      alert("Logging out...");
-      // Placeholder: Replace with real logout logic
-    }
-
-    // Load on page load
-    window.onload = renderRestaurants;
   </script>
 </body>
 </html>
-
-
-
 
